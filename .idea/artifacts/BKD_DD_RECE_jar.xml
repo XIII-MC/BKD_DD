@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="BKD_DD_RECE:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/BKD_DD_RECE_jar</output-path>
-    <root id="archive" name="BKD_DD.jar">
-      <element id="module-output" name="BKD_DD" />
-    </root>
-  </artifact>
-</component>

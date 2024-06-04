@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="BKD_DD_SEND:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/BKD_DD_SEND_jar</output-path>
+  <artifact type="jar" name="BKD_DD_TEST_RECE:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BKD_DD_TEST_RECE_jar</output-path>
     <root id="archive" name="BKD_DD.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/send_meta/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/src/testrece_meta/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="BKD_DD" />
     </root>
